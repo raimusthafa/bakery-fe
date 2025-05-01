@@ -1,8 +1,5 @@
-// Import FC from React
 import { FC } from "react";
-
-// Import React Router
-import { Routes, Route } from "react-router";
+import { Routes, Route } from "react-router-dom";
 
 import ProductIndex from "../views/products";
 import Home from "../views/home";
@@ -11,26 +8,34 @@ import ProductEdit from "../views/products/edit";
 import Login from "../views/auth/login";
 import Register from "../views/auth/register";
 import Allproduct from "../views/allproduct";
+import UserLayout from "../layout/userlayout";
+import AdminLayout from "../layout/adminlayout";
+import PrivateRoute from "./privatroute";
+import Dumpbutton from "../dump/dump_button";
+import Navbar from "../component/navbar";
+import ProductDetail from "../views/detailproduct";
 
-// Import view HomePage
-
-// Definisikan component dengan Type FC (Functional Component)
 const RoutesIndex: FC = () => {
-    return (
-        <Routes>
-            {/* Route untuk halaman utama */}
-            <Route path="/" element={<Home />} />
-            {/* Route untuk halaman products */}
-            <Route path="/products/admin" element={<ProductIndex />} />
-            <Route path="/products" element={<Allproduct />} />
-            {/* Route untuk halaman create product */}
-            <Route path="/products/create" element={<ProductCreate />} />
-            {/* Route untuk halaman edit product */}
-            <Route path="/products/edit/:id" element={<ProductEdit />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-        </Routes>
-    );
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route element={<UserLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<Allproduct />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
+      </Route>
+
+      {/* Private Routes */}
+      <Route path="/dashboard" element={<PrivateRoute />}>
+        <Route index element={<Dumpbutton />} />
+        <Route path="products" element={<ProductIndex />} />
+        <Route path="products/create" element={<ProductCreate />} />
+        <Route path="products/edit/:id" element={<ProductEdit />} />
+      </Route>
+    </Routes>
+  );
 };
 
 export default RoutesIndex;

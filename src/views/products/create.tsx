@@ -1,9 +1,13 @@
 import { FC, useState, FormEvent } from "react";
 import { useNavigate } from "react-router";
-import Api from "../../API_BASE_URL";
 import UploadFoto from "../../component/upfoto";
-import { UploadFile } from "antd";
+import { UploadFile, Checkbox } from "antd";
 import toast from "react-hot-toast";
+import { Link } from 'react-router';
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { Spin } from "antd"; // Kita pakai spinner dari Ant Design
+import { createProduct } from "../../api/products";
+import { useProductStore } from "../../store/product";
 
 interface Errors {
     image?: string[];
@@ -14,6 +18,7 @@ interface Errors {
 }
 
 const ProductCreate: FC = () => {
+    const { triggerRefresh } = useProductStore();
     const [imageList, setImageList] = useState<UploadFile[]>([]);
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
@@ -26,11 +31,12 @@ const ProductCreate: FC = () => {
         setImageList(fileList);
     };
 
+    const [isPreorder, setIsPreorder] = useState<boolean>(false); // Add state for is_preorder
+
     const storeProduct = async (e: FormEvent) => {
         e.preventDefault();
         setErrors({});
-        
-        // Validasi sebelum mengirim data
+    
         if (imageList.length === 0) {
             setErrors({ image: ["Image is required"] });
             return;
@@ -47,25 +53,20 @@ const ProductCreate: FC = () => {
             setErrors({ price: ["Price must be greater than 0"] });
             return;
         }
-
+    
         setIsLoading(true);
-
-        const formData = new FormData();
-        if (imageList.length > 0 && imageList[0].originFileObj) {
-            formData.append("image", imageList[0].originFileObj);
-        }
-        formData.append("title", title);
-        formData.append("content", content);
-        formData.append("price", price.toString());
-
+    
         try {
-            await Api.post("/api/posts", formData);
-            navigate("/products/admin");
-            toast.success("Data Berhasil Ditambah!",
-                {
-                  duration: 4000,
-                }
-              );
+            await createProduct({
+                image: imageList[0].originFileObj!,
+                title,
+                content,
+                price: price as number,
+                is_preorder: isPreorder, // Add is_preorder to API payload
+            });
+            toast.success("Data Berhasil Ditambah!", { duration: 4000 });
+            triggerRefresh();
+            navigate("/dashboard/products");
         } catch (error: any) {
             if (error.response?.data?.errors) {
                 setErrors(error.response.data.errors);
@@ -78,6 +79,7 @@ const ProductCreate: FC = () => {
             setIsLoading(false);
         }
     };
+     
 
     return (
         <div className="max-w-2xl mx-auto mt-10">
@@ -122,6 +124,15 @@ const ProductCreate: FC = () => {
                         )}
                     </div>
 
+                    <div>
+                    <Checkbox
+                        checked={isPreorder}
+                        onChange={(e) => setIsPreorder(e.target.checked)}
+                    >
+                        <span className="font-semibold text-gray-700 text-base">Preorder</span>
+                    </Checkbox>
+                    </div>
+
                     {/* Price Input */}
                     <div>
                         <label className="block font-semibold text-gray-700">Price</label>
@@ -145,15 +156,37 @@ const ProductCreate: FC = () => {
                     )}
 
                     {/* Submit Button */}
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className={`w-full text-white py-2 rounded-md shadow-md transition ${
-                            isLoading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-                        }`}
-                    >
-                        {isLoading ? "Saving..." : "Save"}
-                    </button>
+                    <div className="flex w-full mt-8 gap-2">
+      {/* Tombol Kembali */}
+      <Link
+        to="/dashboard/products"
+        className="flex items-center justify-center gap-2 w-1/2 py-3 bg-gray-200 text-gray-700 rounded-md shadow-md hover:bg-gray-300 transition"
+      >
+        <ArrowLeftIcon className="w-5 h-5" />
+        <span>Kembali</span>
+      </Link>
+
+      {/* Tombol Save */}
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={`flex items-center justify-center gap-4 w-1/2 py-3 text-white rounded-md shadow-md transition ${
+          isLoading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700"
+        }`}
+      >
+        {isLoading ? (
+          <>
+            Saving
+            <Spin size="small" />
+          </>
+        ) : (
+          "Save"
+        )}
+      </button>
+    </div>
+
                 </form>
             </div>
         </div>

@@ -4,11 +4,14 @@ import axios from "axios";
 interface User {
   name: string;
   email: string;
+  role: string;
 }
 
 interface AuthState {
   token: string | null;
   user: User | null;
+  isAuthenticated: boolean; // ⬅️ Tambahkan ini
+  role: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, password_confirmation: string) => Promise<void>;
   logout: () => void;
@@ -18,6 +21,8 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   token: localStorage.getItem("token"),
   user: null,
+  role: null,
+  isAuthenticated: !!localStorage.getItem("token"), // ⬅️ Diambil dari localStorage
 
   login: async (email, password) => {
     try {
@@ -33,7 +38,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         headers: { Authorization: `Bearer ${res.data.token}` },
       });
   
-      set({ token: res.data.token, user: userRes.data });
+      // set({ token: res.data.token, user: userRes.data });
+      set({ token: res.data.token, user: userRes.data,  role: userRes.data.role, isAuthenticated: true }); // ⬅️ Set true
     } catch (error) {
       console.error("Login failed", error);
       throw error; // ⬅️ Tambahkan ini
@@ -65,7 +71,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     localStorage.removeItem("token");
     delete axios.defaults.headers.common["Authorization"];
-    set({ token: null, user: null });
+    // set({ token: null, user: null });
+    set({ token: null, user: null, isAuthenticated: false }); // ⬅️ Set false
   },
 
   fetchUser: async () => {
@@ -74,6 +81,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       set({ user: res.data });
+      role: res.data.role // ⬅️ tambah ini
     } catch (error) {
       console.error("Fetch user failed", error);
       throw error;

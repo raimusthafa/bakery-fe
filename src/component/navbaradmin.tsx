@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { MenuOutlined, CloseOutlined, LoginOutlined } from '@ant-design/icons';
 import { Button, Drawer, ConfigProvider } from 'antd';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import LoginLogoutButton from './authbutton';
 
-const Navbar: React.FC = () => {
+const NavbarAdmin: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -25,14 +25,14 @@ const Navbar: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-xl font-bold text-[#6F4E37]">🍞 BAKERY</div>
+        <div className="text-xl font-bold text-[#6F4E37]">🍞 INI ADMIN</div>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex space-x-6 text-[#6F4E37] font-medium">
-          <Link to="/" className="hover:underline underline-offset-4">Home</Link>
-          <Link to="/products" className="hover:underline underline-offset-4">Products</Link>
-          <Link to="#" className="hover:underline underline-offset-4">About</Link>
-          <Link to="/contact" className="hover:underline underline-offset-4">Contact</Link>
+          <Link to="/dashboard" className="hover:underline underline-offset-4">Dashboard</Link>
+          <Link to="/dashboard/products" className="hover:underline underline-offset-4">Produk</Link>
+          <Link to="/categories/admin" className="hover:underline underline-offset-4">Categori</Link>
+          <Link to="/stock/admin" className="hover:underline underline-offset-4">Stok</Link>
         </nav>
         <div className='hidden md:flex'>
         <LoginLogoutButton/>
@@ -82,4 +82,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default NavbarAdmin;

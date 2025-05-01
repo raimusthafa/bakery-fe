@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthStore } from "../../store/auth";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom"; // ✅ ini harus react-router-dom, bukan react-router
 import toast from "react-hot-toast";
 
 export default function Login() {
@@ -14,23 +14,27 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      
+
       // Ambil user terbaru dari Zustand setelah login berhasil
       const currentUser = useAuthStore.getState().user;
-      toast.success(`Selamat Datang, ${currentUser?.name || "User"}`,
-        {
-          duration: 4000,
-        }
-      );
       
-      navigate("/");
+      toast.success(`Selamat Datang, ${currentUser?.name || "User"}`, {
+        duration: 3000,
+      });
+
+      // 🚀 Pindahkan berdasarkan role
+      if (currentUser?.role === "admin") {
+        navigate("/dashboard"); 
+      } else {
+        navigate("/");
+      }
+      
     } catch (error: any) {
       const message =
         error.response?.data?.message || "Login gagal. Periksa email atau password.";
       toast.error(message);
     }
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FDF6ED]">

@@ -1,12 +1,16 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, lazy, Suspense } from "react";
 import { useAuthStore } from "../store/auth";
 import DrawCircleText from "../component/drawtext";
-import BestSeller from "../component/home/bestseller";
-import WhyChooseUs from "../component/home/service";
-import TestimonialCarousel from "../component/home/review";
-import PromoBar from "../component/home/newsletter";
-import LocationSection from "../component/home/loaction";
-import Footer from "../component/home/footer";
+import AOS from "aos";
+import "aos/dist/aos.css"; // AOS Styles
+
+// Lazy load komponen besar
+const BestSeller = lazy(() => import("../component/home/bestseller"));
+const WhyChooseUs = lazy(() => import("../component/home/service"));
+const TestimonialCarousel = lazy(() => import("../component/home/review"));
+const PromoBar = lazy(() => import("../component/home/newsletter"));
+const LocationSection = lazy(() => import("../component/home/loaction"));
+const Footer = lazy(() => import("../component/home/footer"));
 
 export const Home: FC = () => {
   const user = useAuthStore((state) => state.user);
@@ -15,6 +19,9 @@ export const Home: FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Initialize AOS
+    AOS.init();
+
     if (token && !user) {
       setLoading(true);
       fetchUser().finally(() => setLoading(false));
@@ -23,77 +30,72 @@ export const Home: FC = () => {
 
   return (
     <div className="bg-[#FFF8F1]">
-      <div className="container">
-        {/* Gambar Latar Belakang */}
+      <div className="container mx-auto">
+        {/* Hero Section */}
         <div className="relative h-screen">
           <img
-            src="https://jnewsonline.com/wp-content/uploads/2023/10/bakery-di-jakarta.jpg"  // Ganti dengan path gambar yang sesuai
+            src="/img/bg-bakery.webp" // Disarankan simpan di folder public
             alt="Background"
             className="w-full h-screen object-cover"
+            width={1920}
+            height={1080}
+            loading="eager"
+            decoding="async"
           />
-          {/* Text overlay with modern styling */}
-          <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/40 backdrop-blur-none transition-all duration-300">
+          <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/40">
             <div className="text-center p-8 max-w-4xl">
               <div className="animate-fade-in delay-200">
                 <DrawCircleText />
               </div>
               {!user && (
                 <div className="mt-8 animate-fade-in delay-300">
-                  {/* <button className="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-full transition-all transform hover:scale-105">
-                    Explore Our Menu
-                  </button> */}
+                  {/* Bisa tambahkan tombol call to action di sini */}
                 </div>
               )}
             </div>
           </div>
         </div>
 
+        {/* Auth Greeting */}
         {token && (
-  <>
-    {loading && (
-      <p className="text-center text-gray-500">Memuat data pengguna...</p>
-    )}
+          <>
+            {loading && (
+              <p className="text-center text-gray-500">
+                Memuat data pengguna...
+              </p>
+            )}
+            {user && (
+              <div className="flex justify-center">
+                <div className="p-5 mt-5 mb-4 bg-gray-100 rounded-2xl shadow-lg">
+                  <div className="py-5 text-center">
+                    <h1 className="text-4xl font-bold">Halo, {user.name}!</h1>
+                    <p className="text-lg max-w-2xl mx-auto">{user.email}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
 
-    {user && (
-      <div className="flex justify-center">
-        <div className="p-5 mt-5 mb-4 bg-gray-100 rounded-2xl shadow-lg">
-          <div className="py-5 text-center">
-            <h1 className="text-4xl font-bold">Halo, {user.name}!</h1>
-            <p className="text-lg max-w-2xl mx-auto">
-              {user.email}
-            </p>
+        {/* Lazy-loaded components with AOS Animations */}
+        <Suspense fallback={<div className="text-center my-10">Memuat...</div>}>
+          <div data-aos="fade-up" data-aos-duration="900">
+            <BestSeller />
           </div>
-        </div>
-      </div>
-    )}
-  </>
-)} 
-      </div>
-      <div     
-        data-aos="fade-up"
-        data-aos-duration="900">
-      <BestSeller/>
-      </div>
-      <div     
-        data-aos="fade-up"
-        data-aos-duration="900">
-      <WhyChooseUs/>
-      </div>
-      <div     
-        data-aos="fade-up"
-        data-aos-duration="900">
-      <TestimonialCarousel/>
-      </div>
-      <div     
-        data-aos="fade-up"
-        data-aos-duration="900">
-      <PromoBar/>
-      </div>
-      <div     
-        data-aos="fade-up"
-        data-aos-duration="900">
-      <LocationSection/>
-      <Footer/>
+          <div data-aos="fade-up" data-aos-duration="900">
+            <WhyChooseUs />
+          </div>
+          <div data-aos="fade-up" data-aos-duration="900">
+            <TestimonialCarousel />
+          </div>
+          <div data-aos="fade-up" data-aos-duration="900">
+            <PromoBar />
+          </div>
+          <div data-aos="fade-up" data-aos-duration="900">
+            <LocationSection />
+            <Footer />
+          </div>
+        </Suspense>
       </div>
     </div>
   );

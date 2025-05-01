@@ -40,7 +40,7 @@ const UploadFoto: React.FC<UploadFotoProps> = ({ fileList, onChange }) => {
     <>
       <Dragger
         multiple={true}
-        listType="picture-card"
+        listType="picture"
         fileList={fileList}
         beforeUpload={() => false}
         onPreview={handlePreview}

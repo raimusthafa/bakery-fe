@@ -14,7 +14,7 @@ export const DrawCircleText: React.FC = () => {
         <svg
         viewBox="0 0 300 80"
         fill="none"
-        className="absolute -left-2 -right-2 top-0 bottom-0 -translate-y-2 translate-x-[135px] w-[190px] h-[60px] "
+        className="absolute -left-2 -right-2 top-0 bottom-0 -translate-y-2 translate-x-[135px] w-[190px] h-[60px] hidden lg:block"
         >
           <motion.path
             initial={{ pathLength: 0 }}
