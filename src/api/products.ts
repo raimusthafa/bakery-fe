@@ -23,6 +23,7 @@ interface ProductDetail {
   price: string;
   image?: string;
   is_preorder: boolean; // Add is_preorder as a boolean
+  category_name?: string;
 }
 
 export type { ProductDetail };
@@ -58,6 +59,7 @@ export const deleteProduct = async (id: number) => {
 };
 
 export const createProduct = async (payload: ProductPayload) => {
+  console.log("Data yang dikirim ke createProduct:", payload);
   const formData = new FormData();
   formData.append("image", payload.image);
   formData.append("title", payload.title);
@@ -85,25 +87,28 @@ export const fetchProductDetail = async (id: string) => {
 };
 
 export const updateProduct = async (id: string, payload: UpdateProductPayload) => {
-  const formData = new FormData();
-
-  if (payload.image) {
-    formData.append("image", payload.image);
-  }
-  formData.append("title", payload.title);
-  formData.append("content", payload.content);
-  formData.append("price", payload.price);
-  formData.append("_method", "PUT");
-
-  const response = await Api.post(`/api/posts/${id}`, formData, {
-    headers: {
-      ...getAuthHeader(),
-      "Content-Type": "multipart/form-data",
-    },
-  });
-
-  return response.data;
-};
+    const formData = new FormData();
+  
+    if (payload.image) {
+      formData.append("image", payload.image);
+    }
+  
+    formData.append("title", payload.title);
+    formData.append("content", payload.content);
+    formData.append("price", payload.price);
+    formData.append("is_preorder", payload.is_preorder.toString()); // ✅ tambahkan ini
+    formData.append("_method", "PUT"); // Laravel butuh ini untuk spoofing PUT
+  
+    const response = await Api.post(`/api/posts/${id}`, formData, {
+      headers: {
+        ...getAuthHeader(),
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  
+    return response.data;
+  };
+  
 
 
 // khusus user
@@ -113,10 +118,18 @@ export const fetchPublicPosts = async (page: number, perPage: number) => {
   const response = await Api.get("/api/public-posts", {
     params: { page, per_page: perPage },
   });
+  console.log("data kue", response.data.data)
   return response.data.data;
 };
 
 export const fetchPublicPostDetail = async (id: string) => {
-  const response = await Api.get(`/api/public-posts/${id}`);
-  return response.data.data as ProductDetail;
+  try {
+    const response = await Api.get(`/api/public-posts/${id}`);
+    console.log("Detail produk yang diambil:", response.data.data);
+    return response.data.data as ProductDetail;
+  } catch (error) {
+    console.error("Gagal mengambil detail produk:", error);
+    throw error;
+  }
 };
+

@@ -39,6 +39,8 @@ const ProductEdit: FC = () => {
   const loadProductDetail = async () => {
     try {
       const data = await fetchProductDetail(id!);
+      console.log("is_preorder dari API:", data.is_preorder, typeof data.is_preorder);
+
       setTitle(data.title);
       setContent(data.content);
       setPrice(data.price);
@@ -84,6 +86,7 @@ const ProductEdit: FC = () => {
       toast.error("Gagal mengedit data.", { duration: 4000 });
     }
   };
+  
 
   return (
     <div className="max-w-2xl mx-auto mt-10">

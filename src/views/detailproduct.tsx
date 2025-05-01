@@ -2,31 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { ProductDetail } from "../api/products";
 import { fetchPublicPostDetail } from "../api/products";
+import {
+  Card,
+  Image,
+  Typography,
+  Tag,
+  Button,
+  Skeleton,
+  Row,
+  Col,
+  Space,
+  message,
+} from "antd";
+import {
+  ShoppingCartOutlined,
+  ArrowLeftOutlined,
+} from "@ant-design/icons";
+import toast from "react-hot-toast";
 
-const LoadingCard = () => (
-  <section className="min-h-screen bg-[#FDF6ED] py-10 px-4">
-    <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden animate-pulse">
-      <div className="flex flex-col md:flex-row">
-        {/* Gambar Produk */}
-        <div className="md:w-1/2 bg-gray-300 h-96 md:rounded-l-2xl"></div>
-
-        {/* Detail Produk */}
-        <div className="md:w-1/2 p-6 flex flex-col justify-between">
-          <div>
-            <div className="h-10 bg-gray-300 rounded w-3/4 mb-4"></div>
-            <div className="h-8 bg-gray-300 rounded w-1/2 mb-2"></div>
-            <div className="h-24 bg-gray-300 rounded mb-6"></div>
-            {/* <div className="h-6 bg-yellow-200 rounded w-[15%]"></div> */}
-          </div>
-
-          <div className="mt-4">
-            <div className="h-10 bg-gray-300 rounded w-1/3"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-);
+const { Title, Paragraph, Text } = Typography;
 
 const ProductDetail = () => {
   const params = useParams();
@@ -34,6 +28,19 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<ProductDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [expanded, setExpanded] = useState(false);
+const [showToggle, setShowToggle] = useState(false);
+const paragraphRef = React.useRef<HTMLDivElement>(null);
+
+useEffect(() => {
+  if (paragraphRef.current) {
+    const lineHeight = parseFloat(getComputedStyle(paragraphRef.current).lineHeight || "24");
+    const maxHeight = lineHeight * 4; // 4 lines
+    setShowToggle(paragraphRef.current.scrollHeight > maxHeight);
+  }
+}, [product?.content]);
+
+
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -50,9 +57,6 @@ const ProductDetail = () => {
         console.error("Gagal memuat detail produk:", error);
         setError("Gagal memuat detail produk.");
       } finally {
-        // setTimeout(() => {
-        //   setLoading(false);  // Setelah 3 detik, set loading ke false
-        // }, 10000); // 3000 ms = 3 detik
         setLoading(false);
       }
     };
@@ -61,7 +65,29 @@ const ProductDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <LoadingCard />;
+    return (
+      <section className="min-h-screen bg-[#FDF6ED] py-10 px-4">
+      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden animate-pulse">
+        <div className="flex flex-col md:flex-row">
+          {/* Gambar Produk */}
+          <div className="md:w-1/2 bg-gray-300 h-96 md:rounded-l-2xl"></div>
+  
+          {/* Detail Produk */}
+          <div className="md:w-1/2 p-6 flex flex-col justify-between">
+            <div>
+              <div className="h-10 bg-gray-300 rounded w-3/4 mb-4"></div>
+              <div className="h-8 bg-gray-300 rounded w-1/2 mb-2"></div>
+              <div className="h-24 bg-gray-300 rounded mb-6"></div>
+              {/* <div className="h-6 bg-yellow-200 rounded w-[15%]"></div> */}
+            </div>
+            <div className="mt-4">
+              <div className="h-10 bg-gray-300 rounded w-1/3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    );
   }
 
   if (error) {
@@ -82,43 +108,92 @@ const ProductDetail = () => {
 
   return (
     <section className="min-h-screen bg-[#FDF6ED] py-10 px-4">
-      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
-        <div className="flex flex-col md:flex-row">
-          {/* Gambar Produk */}
-          <div className="md:w-1/2">
-            <img
-              src={product.image || "/default-image.jpg"}
-              alt={product.title}
-              className="w-full h-96 object-cover md:rounded-l-2xl"
-            />
-          </div>
+      <div className="max-w-6xl mx-auto">
+        <Card bordered={false} className="rounded-2xl shadow-lg">
+          <Row gutter={[32, 16]}>
+            <Col xs={24} md={12}>
+              <Image
+                src={product.image || "/default-image.jpg"}
+                alt={product.title}
+                width="100%"
+                height={400}
+                style={{ objectFit: "cover", borderRadius: 16 }}
+                placeholder
+              />
+            </Col>
 
-          {/* Detail Produk */}
-          <div className="md:w-1/2 p-6 flex flex-col justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-[#6F4E37] mb-4">{product.title}</h1>
-              <p className="text-xl text-[#6F4E37] font-semibold mb-2">
-                Rp {parseInt(product.price).toLocaleString("id-ID")}
-              </p>
-              <p className="text-[#8B7E74] mb-6 leading-relaxed whitespace-pre-line">{product.content}</p>
+            <Col xs={24} md={12}>
+              <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+                <Title level={2} style={{ color: "#6F4E37" }}>
+                  {product.title}
+                </Title>
 
-              {product.is_preorder && (
-                <div className="bg-yellow-100 text-yellow-800 flex justify-center text-sm px-4 py-2 rounded-lg w-[15%]">
-                <span>Preorder</span>
-              </div>
-              )}
-            </div>
+                <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <Title level={4} style={{ margin: 0, color: "#6F4E37" }}>
+                      Rp {parseInt(product.price).toLocaleString("id-ID")}
+                    </Title>
+                    {product.is_preorder && (
+                      <Tag color="gold" style={{ margin: 0, }}>Preorder</Tag>
+                    )}
+                  </div>
+                </Space>
 
-            <div className="mt-4">
-              <Link
-                to="/products"
-                className="inline-block bg-[#D9822B] hover:bg-[#B88C65] text-white px-6 py-2 rounded-xl transition"
+                <div
+                ref={paragraphRef}
+                style={{
+                  color: "#8B7E74",
+                  whiteSpace: "pre-line",
+                  overflow: "hidden",
+                  display: "-webkit-box",
+                  WebkitLineClamp: expanded ? "none" : 4,
+                  WebkitBoxOrient: "vertical",
+                }}
               >
-                Kembali ke Produk
-              </Link>
-            </div>
-          </div>
-        </div>
+                {product.content}
+              </div>
+              {showToggle && (
+                <div className="-mt-4">
+                <Button type="link" onClick={() => setExpanded(!expanded)} style={{ padding: 0 }}>
+                  {expanded ? "Lihat Lebih Sedikit" : "Lihat Selengkapnya"}
+                </Button>
+                </div>
+                )}
+
+
+                {product.category_name && (
+                  <Text type="secondary">Kategori: {product.category_name}</Text>
+                )}
+
+<div className="pt-6">
+  <div className="flex flex-col md:flex-row gap-4">
+    <Button
+      type="primary"
+      icon={<ShoppingCartOutlined />}
+      className="w-full md:w-auto md:flex-1"
+      style={{ backgroundColor: "#D9822B", borderColor: "#D9822B" }}
+      onClick={() => toast.success("Ditambahkan ke keranjang")}
+    >
+      Tambah ke Keranjang
+    </Button>
+    <Link to="/products" className="w-full md:w-auto md:flex-1">
+      <Button
+        block
+        type="default"
+        icon={<ArrowLeftOutlined />}
+        style={{ borderColor: "#D9822B", color: "#D9822B" }}
+      >
+        Kembali ke Produk
+      </Button>
+    </Link>
+  </div>
+</div>
+
+
+              </Space>
+            </Col>
+          </Row>
+        </Card>
       </div>
     </section>
   );

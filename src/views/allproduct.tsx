@@ -20,7 +20,7 @@ const Allproducts = () => {
     const loadProducts = async () => {
       try {
         const response = await fetchPublicPosts(1, 12);
-        console.log("API Response:", response);
+        // console.log("API Response:", response);
 
         const items = Array.isArray(response?.data?.data)
           ? response.data.data
