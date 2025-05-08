@@ -1,6 +1,5 @@
 import { FC, useState, useEffect } from "react";
 import { Spin, Button, Image, Table, Tooltip, Space, Typography, Alert, Empty } from "antd";
-import { Link } from "react-router"; // Pastikan pakai 'react-router-dom' jika ini bukan versi v3
 import toast from "react-hot-toast";
 import { EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";

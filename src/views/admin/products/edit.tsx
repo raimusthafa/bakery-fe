@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { FC, useState, useEffect, FormEvent } from "react";
 import { useNavigate, useParams } from "react-router";
 import { UploadFile, Checkbox } from "antd";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ interface Errors {
 
 const ProductEdit: FC = () => {
   const { triggerRefresh } = useProductStore();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading] = useState<boolean>(false);
   const [imageList, setImageList] = useState<UploadFile[]>([]);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");

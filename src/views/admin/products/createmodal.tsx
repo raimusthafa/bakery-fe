@@ -4,7 +4,6 @@ import UploadFoto from "../../../component/upfoto";
 import toast from "react-hot-toast";
 import { createProduct } from "../../../api/products";
 import { useProductStore } from "../../../store/product";
-import { SyncOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 

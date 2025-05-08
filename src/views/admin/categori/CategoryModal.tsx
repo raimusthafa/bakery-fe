@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { Modal, Form, Input, message } from "antd";
+import { Modal, Form, Input } from "antd";
 import { createCategory, updateCategory } from "../../../api/category";
 import toast from "react-hot-toast";
 
