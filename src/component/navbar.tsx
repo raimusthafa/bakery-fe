@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
         <div className="flex flex-col space-y-4 text-[#6F4E37] font-medium">
           <Link to="/" onClick={() => setDrawerOpen(false)}>Home</Link>
           <Link to="/products" onClick={() => setDrawerOpen(false)}>Products</Link>
-          <Link to="/features" onClick={() => setDrawerOpen(false)}>Features</Link>
+          <Link to="/parallax" onClick={() => setDrawerOpen(false)}>About</Link>
           <Link to="/contact" onClick={() => setDrawerOpen(false)}>Contact</Link>
           <ConfigProvider
       theme={{

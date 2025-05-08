@@ -30,15 +30,13 @@ export const Home: FC = () => {
 
   return (
     <div className="bg-[#FFF8F1]">
-      <div className="container mx-auto">
+      <div className="">
         {/* Hero Section */}
-        <div className="relative h-screen">
+        <div className="relative h-[95vh]">
           <img
             src="/img/bg-bakery.webp" // Disarankan simpan di folder public
             alt="Background"
-            className="w-full h-screen object-cover"
-            width={1920}
-            height={1080}
+            className="w-full h-[95vh] object-cover"
             loading="eager"
             decoding="async"
           />
@@ -49,7 +47,7 @@ export const Home: FC = () => {
                   <DrawCircleText />
                 </div>
                 <div className="w-20 mx-auto">
-+                  <img src="/img/scroll5.gif" alt="Scroll down"/>
+                  <img src="/img/scroll5.gif" alt="Scroll down"/>
                  </div>
               </div>
               {!user && (
