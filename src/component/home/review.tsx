@@ -1,4 +1,3 @@
-import React from 'react';
 import Slider from 'react-slick';
 import { ChatBubbleLeftRightIcon, StarIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import 'slick-carousel/slick/slick.css';

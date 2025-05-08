@@ -8,11 +8,9 @@ import {
   Typography,
   Tag,
   Button,
-  Skeleton,
   Row,
   Col,
   Space,
-  message,
 } from "antd";
 import {
   ShoppingCartOutlined,
@@ -20,7 +18,7 @@ import {
 } from "@ant-design/icons";
 import toast from "react-hot-toast";
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 
 const ProductDetail = () => {
   const params = useParams();

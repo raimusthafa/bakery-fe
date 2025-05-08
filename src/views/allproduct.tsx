@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { fetchPublicPosts, Product } from "../api/products";
 import { Link } from "react-router-dom";
 

@@ -1,5 +1,3 @@
-import React from "react";
-
 const ParallaxHero = () => {
   return (
     <div className="w-full">

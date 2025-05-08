@@ -3,7 +3,6 @@ import { useAuthStore } from "../store/auth";
 import DrawCircleText from "../component/drawtext";
 import AOS from "aos";
 import "aos/dist/aos.css"; // AOS Styles
-import { Link } from "react-router-dom";
 
 // Lazy load komponen besar
 const BestSeller = lazy(() => import("../component/home/bestseller"));

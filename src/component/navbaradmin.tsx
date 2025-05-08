@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MenuOutlined, CloseOutlined, LoginOutlined } from '@ant-design/icons';
+import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, Drawer, ConfigProvider } from 'antd';
 import { Link } from 'react-router-dom';
 import LoginLogoutButton from './authbutton';
