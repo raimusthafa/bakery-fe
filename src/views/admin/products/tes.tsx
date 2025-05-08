@@ -1,8 +1,8 @@
 import { FC, useState, useEffect, useCallback } from "react";
 import { Spin, Button, Image, Table, Tooltip, Space, Typography, Alert, Empty } from "antd";
 import { Link } from "react-router"; // pastikan menggunakan 'react-router-dom'
-import Api from "../../API_BASE_URL";
-import DeleteModal from "../../component/confirmdelete";
+import Api from "../../../API_BASE_URL";
+import DeleteModal from "../../../component/confirmdelete";
 import toast from "react-hot-toast";
 import { EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";

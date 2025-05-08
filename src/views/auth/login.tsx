@@ -18,9 +18,20 @@ export default function Login() {
       // Ambil user terbaru dari Zustand setelah login berhasil
       const currentUser = useAuthStore.getState().user;
       
-      toast.success(`Selamat Datang, ${currentUser?.name || "User"}`, {
-        duration: 3000,
-      });
+      // toast.success(`Selamat Datang, ${currentUser?.name || "User"}`, {
+      //   duration: 3000,
+      // });
+
+      toast(`Hello, ${currentUser?.name || "User"}!`,
+        {
+          icon: '👋',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
 
       // 🚀 Pindahkan berdasarkan role
       if (currentUser?.role === "admin") {

@@ -5,9 +5,9 @@ import toast from "react-hot-toast";
 import { Link } from 'react-router';
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Spin } from "antd"; // Kita pakai spinner dari Ant Design
-import UploadFoto from "../../component/upfoto";
-import { fetchProductDetail, updateProduct } from "../../api/products";
-import { useProductStore } from "../../store/product";
+import UploadFoto from "../../../component/upfoto";
+import { fetchProductDetail, updateProduct } from "../../../api/products";
+import { useProductStore } from "../../../store/product";
 
 // Interface Errors
 interface Errors {

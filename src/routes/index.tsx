@@ -1,10 +1,7 @@
 import { FC } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import ProductIndex from "../views/products";
 import Home from "../views/home";
-import ProductCreate from "../views/products/create";
-import ProductEdit from "../views/products/edit";
 import Login from "../views/auth/login";
 import Register from "../views/auth/register";
 import Allproduct from "../views/allproduct";
@@ -14,6 +11,14 @@ import PrivateRoute from "./privatroute";
 import Dumpbutton from "../dump/dump_button";
 import Navbar from "../component/navbar";
 import ProductDetail from "../views/detailproduct";
+import ProductIndex from "../views/admin/products";
+import ProductCreate from "../views/admin/products/create";
+import ProductEdit from "../views/admin/products/edit";
+import CategoryIndex from "../views/admin/categori";
+import CategoryCreate from "../views/admin/categori/create";
+import CategoryEdit from "../views/admin/categori/edit";
+import CategoryPage from "../views/cobaa/CategoryPage";
+import ParallaxHero from "../component/home/parallax";
 
 const RoutesIndex: FC = () => {
   return (
@@ -25,14 +30,19 @@ const RoutesIndex: FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/parallax" element={<ParallaxHero />} />
       </Route>
 
       {/* Private Routes */}
       <Route path="/dashboard" element={<PrivateRoute />}>
         <Route index element={<Dumpbutton />} />
         <Route path="products" element={<ProductIndex />} />
+        <Route path="categories" element={<CategoryIndex />} />
+        <Route path="categories2" element={<CategoryPage />} />
         <Route path="products/create" element={<ProductCreate />} />
         <Route path="products/edit/:id" element={<ProductEdit />} />
+        <Route path="categories/create" element={<CategoryCreate />} />
+        <Route path="categories/edit/:id" element={<CategoryEdit />} />
       </Route>
     </Routes>
   );

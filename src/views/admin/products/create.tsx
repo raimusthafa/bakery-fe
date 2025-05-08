@@ -1,13 +1,13 @@
 import { FC, useState, FormEvent } from "react";
 import { useNavigate } from "react-router";
-import UploadFoto from "../../component/upfoto";
+import UploadFoto from "../../../component/upfoto";
 import { UploadFile, Checkbox } from "antd";
 import toast from "react-hot-toast";
 import { Link } from 'react-router';
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Spin } from "antd"; // Kita pakai spinner dari Ant Design
-import { createProduct } from "../../api/products";
-import { useProductStore } from "../../store/product";
+import { createProduct } from "../../../api/products";
+import { useProductStore } from "../../../store/product";
 
 interface Errors {
     image?: string[];

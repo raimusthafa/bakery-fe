@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/auth";
 import DrawCircleText from "../component/drawtext";
 import AOS from "aos";
 import "aos/dist/aos.css"; // AOS Styles
+import { Link } from "react-router-dom";
 
 // Lazy load komponen besar
 const BestSeller = lazy(() => import("../component/home/bestseller"));
@@ -45,7 +46,12 @@ export const Home: FC = () => {
           <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/40">
             <div className="text-center p-8 max-w-4xl">
               <div className="animate-fade-in delay-200">
-                <DrawCircleText />
+                <div className="-mb-14">
+                  <DrawCircleText />
+                </div>
+                <div className="w-20 mx-auto">
++                  <img src="/img/scroll5.gif" alt="Scroll down"/>
+                 </div>
               </div>
               {!user && (
                 <div className="mt-8 animate-fade-in delay-300">

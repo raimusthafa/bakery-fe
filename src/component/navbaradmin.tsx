@@ -31,7 +31,8 @@ const NavbarAdmin: React.FC = () => {
         <nav className="hidden md:flex space-x-6 text-[#6F4E37] font-medium">
           <Link to="/dashboard" className="hover:underline underline-offset-4">Dashboard</Link>
           <Link to="/dashboard/products" className="hover:underline underline-offset-4">Produk</Link>
-          <Link to="/categories/admin" className="hover:underline underline-offset-4">Categori</Link>
+          <Link to="/dashboard/categories" className="hover:underline underline-offset-4">Categori</Link>
+          <Link to="/dashboard/categories2" className="hover:underline underline-offset-4">Categori - 2</Link>
           <Link to="/stock/admin" className="hover:underline underline-offset-4">Stok</Link>
         </nav>
         <div className='hidden md:flex'>

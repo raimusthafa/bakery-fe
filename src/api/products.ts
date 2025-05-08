@@ -53,10 +53,17 @@ export const fetchProducts = async (page: number, perPage: number) => {
 };
 
 export const deleteProduct = async (id: number) => {
-  await Api.delete(`/api/posts/${id}`, {
-    headers: getAuthHeader(),
-  });
+  try {
+    const response = await Api.delete(`/api/posts/${id}`, {
+      headers: getAuthHeader(),
+    });
+    console.log("Produk berhasil dihapus", response);
+  } catch (error) {
+    console.error("Error menghapus produk:", error);
+    throw error;  // Lempar kembali error agar bisa ditangani di frontend
+  }
 };
+
 
 export const createProduct = async (payload: ProductPayload) => {
   console.log("Data yang dikirim ke createProduct:", payload);

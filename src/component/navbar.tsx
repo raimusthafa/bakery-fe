@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
         <nav className="hidden md:flex space-x-6 text-[#6F4E37] font-medium">
           <Link to="/" className="hover:underline underline-offset-4">Home</Link>
           <Link to="/products" className="hover:underline underline-offset-4">Products</Link>
-          <Link to="#" className="hover:underline underline-offset-4">About</Link>
+          <Link to="/parallax" className="hover:underline underline-offset-4">About</Link>
           <Link to="/contact" className="hover:underline underline-offset-4">Contact</Link>
         </nav>
         <div className='hidden md:flex'>

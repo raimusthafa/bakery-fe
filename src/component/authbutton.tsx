@@ -16,6 +16,19 @@ const LoginLogoutButton = () => {
     setIsModalOpen(true);
   };
 
+  const getRandomColor = (input: string = "") => {
+    const colors = [
+      "#f56a00", "#7265e6", "#ffbf00", "#00a2ae",
+      "#87d068", "#d46b08", "#8e44ad", "#3498db",
+      "#e67e22", "#2ecc71", "#e74c3c", "#1abc9c"
+    ];
+    const index = input
+      .split("")
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+    return colors[index];
+  };
+  
+
   const handleConfirmLogout = async () => {
     try {
       setIsLoggingOut(true);
@@ -65,12 +78,16 @@ const LoginLogoutButton = () => {
             overlayClassName="!min-w-[12rem]"
           >
             <div className="cursor-pointer flex items-center gap-1">
-              <Avatar
+            <Avatar
                 size="large"
-                src={undefined}
-                icon={<UserOutlined />}
-                className="border border-[#D2691E]"
-              />
+                style={{
+                  backgroundColor: getRandomColor(user?.name),
+                  verticalAlign: "middle",
+                }}
+                className="font-semibold border border-[#D2691E]"
+              >
+                {user?.name?.charAt(0).toUpperCase() || "U"}
+              </Avatar>
               <ChevronDownIcon className="w-5 h-5 text-[#6F4E37]" />
             </div>
           </Dropdown>

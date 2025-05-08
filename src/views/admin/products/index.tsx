@@ -2,11 +2,13 @@ import { FC, useState, useEffect } from "react";
 import { Spin, Button, Image, Table, Tooltip, Space, Typography, Alert, Empty } from "antd";
 import { Link } from "react-router"; // Pastikan pakai 'react-router-dom' jika ini bukan versi v3
 import toast from "react-hot-toast";
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { EditOutlined, LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
-import DeleteModal from "../../component/confirmdelete";
-import { fetchProducts, deleteProduct as apiDeleteProduct, Product } from "../../api/products";
-import { useProductStore } from "../../store/product";
+import DeleteModal from "../../../component/confirmdelete";
+import { fetchProducts, deleteProduct as apiDeleteProduct, Product } from "../../../api/products";
+import { useProductStore } from "../../../store/product";
+import ProductModal from "./createmodal";
+import ProductEditModal from "./editmodal";
 
 const ProductIndex: FC = () => {
   const { products, setProducts, shouldRefresh, clearRefresh } = useProductStore();
@@ -18,6 +20,17 @@ const ProductIndex: FC = () => {
     total: 0,
   });
   const [isPaginationLoading, setIsPaginationLoading] = useState<boolean>(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<{
+    id: string;
+    title: string;
+    content: string;
+    price: number;
+    image?: string;
+    is_preorder: boolean;
+  } | null>(null);
 
   const fetchDataProducts = async (
     page = pagination.current,
@@ -75,13 +88,7 @@ const ProductIndex: FC = () => {
     }
   };
 
-  const contentStyle: React.CSSProperties = {
-    padding: 50,
-    background: "rgba(0, 0, 0, 0.05)",
-    borderRadius: 4,
-  };
 
-  const content = <div style={contentStyle} />;
   const WhiteText = <p className="text-black">Edit Produk</p>;
 
   const columns: ColumnsType<Product> = [
@@ -123,15 +130,24 @@ const ProductIndex: FC = () => {
       align: "center",
       render: (_: any, product: Product) => (
         <Space>
-          <Link to={`/dashboard/products/edit/${product.id}`} style={{ display: "inline-block" }}>
             <Tooltip placement="top" title={WhiteText} color="#f6f6f6">
-              <Button
-                type="default"
-                icon={<EditOutlined style={{ color: "#1890ff" }} />} // warna biru Ant Design
-                style={{ borderColor: "#1890ff", color: "#1890ff" }}
-              />
+            <Button
+              type="default"
+              icon={<EditOutlined style={{ color: "#1890ff" }} />}
+              style={{ borderColor: "#1890ff", color: "#1890ff" }}
+              onClick={() => {
+                setSelectedProduct({
+                  id: product.id.toString(),
+                  title: product.title,
+                  content: product.content,
+                  price: product.price,
+                  image: product.image,
+                  is_preorder: product.is_preorder,
+                });
+                setEditModalVisible(true);
+              }}
+            />
             </Tooltip>
-          </Link>
 
           <Tooltip title="Hapus Produk">
             <DeleteModal title="Hapus Produk" onDelete={() => deleteProduct(product.id)} />
@@ -147,20 +163,22 @@ const ProductIndex: FC = () => {
       {!loading && (
         <div className="flex justify-between items-center mb-4">
           <Typography.Title level={2}>Product List</Typography.Title>
-          <Link to="/dashboard/products/create">
-            <Button icon={<PlusOutlined />} size="large">
-              Add New Product
-            </Button>
-          </Link>
+          <Button
+            icon={<PlusOutlined />}
+            size="large"
+            onClick={() => {
+              setModalVisible(true);
+            }}
+          >
+            Add New Product
+          </Button>
         </div>
       )}
 
       {/* Loading spinner */}
       {loading ? (
         <div className="flex justify-center items-center h-[32rem]">
-          <Spin tip="Loading" size="large">
-            {content}
-          </Spin>
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
         </div>
       ) : hasError ? (
         // Jika error jaringan
@@ -176,8 +194,6 @@ const ProductIndex: FC = () => {
             current: pagination.current,
             pageSize: pagination.pageSize,
             total: pagination.total,
-            // showSizeChanger: true,
-            // pageSizeOptions: ['5', '10', '20', '50'],
             itemRender: (page, type, originalElement) => {
               if (
                 isPaginationLoading &&
@@ -198,6 +214,24 @@ const ProductIndex: FC = () => {
           }}
         />
       )}
+
+      <ProductModal
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        onSuccess={() => setModalVisible(false)}
+      />
+      <ProductEditModal
+        visible={editModalVisible}
+        product={selectedProduct}
+        onCancel={() => {
+          setEditModalVisible(false);
+          setSelectedProduct(null);
+        }}
+        onSuccess={() => {
+          setEditModalVisible(false);
+          setSelectedProduct(null);
+        }}
+      />
     </div>
   );
 };

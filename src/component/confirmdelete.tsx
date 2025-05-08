@@ -1,28 +1,27 @@
 import React, { useState } from "react";
 import { Button, Modal, Tooltip } from "antd";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { DeleteOutlined } from "@ant-design/icons";
 
 interface DeleteModalProps {
   title?: string;
   onDelete: () => void;
+  loading?: boolean; // added loading prop
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ title = "Konfirmasi Hapus", onDelete }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({ title = "Konfirmasi Hapus", onDelete, loading = false }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const WhiteText = <p className="text-black">Hapus Produk</p>;
 
   return (
     <>
       <Tooltip placement="top" title={WhiteText} color="#f6f6f6">
-      <Button
-        type="default"
-        icon={<DeleteOutlined style={{ color: "#ff4d4f" }} />} // warna biru Ant Design
-        onClick={() => setModalOpen(true)}
-      
-        style={{ borderColor: "#ff4d4f", color: "#ff4d4f" }}
-/>
-
+        <Button
+          type="default"
+          icon={<DeleteOutlined style={{ color: "#ff4d4f" }} />}
+          onClick={() => setModalOpen(true)}
+          style={{ borderColor: "#ff4d4f", color: "#ff4d4f" }}
+          loading={loading} // apply loading prop here
+        />
       </Tooltip>
 
       <Modal
