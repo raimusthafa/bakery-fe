@@ -6,10 +6,7 @@ import Login from "../views/auth/login";
 import Register from "../views/auth/register";
 import Allproduct from "../views/allproduct";
 import UserLayout from "../layout/userlayout";
-import AdminLayout from "../layout/adminlayout";
 import PrivateRoute from "./privatroute";
-import Dumpbutton from "../dump/dump_button";
-import Navbar from "../component/navbar";
 import ProductDetail from "../views/detailproduct";
 import ProductIndex from "../views/admin/products";
 import ProductCreate from "../views/admin/products/create";
@@ -19,6 +16,7 @@ import CategoryCreate from "../views/admin/categori/create";
 import CategoryEdit from "../views/admin/categori/edit";
 import CategoryPage from "../views/cobaa/CategoryPage";
 import ParallaxHero from "../component/home/parallax";
+import Dashboard from "../views/admin/dashboard/dashboard";
 
 const RoutesIndex: FC = () => {
   return (
@@ -35,7 +33,7 @@ const RoutesIndex: FC = () => {
 
       {/* Private Routes */}
       <Route path="/dashboard" element={<PrivateRoute />}>
-        <Route index element={<Dumpbutton />} />
+        <Route index element={<Dashboard />} />
         <Route path="products" element={<ProductIndex />} />
         <Route path="categories" element={<CategoryIndex />} />
         <Route path="categories2" element={<CategoryPage />} />
