@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, Drawer, ConfigProvider } from 'antd';
-import { Link } from 'react-router';
 import LoginLogoutButton from './authbutton';
+import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -47,17 +47,18 @@ const Navbar: React.FC = () => {
 
       {/* Drawer for mobile menu */}
       <Drawer
+        width={300}
         title="Menu"
         placement="right"
         onClose={() => setDrawerOpen(false)}
         open={drawerOpen}
         closeIcon={<CloseOutlined />}
       >
-        <div className="flex flex-col space-y-4 text-[#6F4E37] font-medium">
-          <Link to="/" onClick={() => setDrawerOpen(false)}>Home</Link>
-          <Link to="/products" onClick={() => setDrawerOpen(false)}>Products</Link>
-          <Link to="/parallax" onClick={() => setDrawerOpen(false)}>About</Link>
-          <Link to="/contact" onClick={() => setDrawerOpen(false)}>Contact</Link>
+        <div className="flex flex-col space-y-4 font-medium">
+          <Link to="/" onClick={() => setDrawerOpen(false)} className="!text-[#6F4E37] no-underline">Home</Link>
+          <Link to="/products" onClick={() => setDrawerOpen(false)} className="!text-[#6F4E37] no-underline">Products</Link>
+          <Link to="/parallax" onClick={() => setDrawerOpen(false)} className="!text-[#6F4E37] no-underline">About</Link>
+          <Link to="/contact" onClick={() => setDrawerOpen(false)} className="!text-[#6F4E37] no-underline">Contact</Link>
           <ConfigProvider
       theme={{
         components: {
@@ -70,7 +71,8 @@ const Navbar: React.FC = () => {
     >
           <Button
           color="primary"
-          variant="outlined"
+          variant="solid"
+          className='mt-5'
           onClick={() => setDrawerOpen(false)}
           >
             Login
